@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>سقالات — منصة المقاولات وتأجير المعدات في مصر</title>
+    <title>سقالات — منصة المقاولات وتأجير المعدات</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -11,10 +11,11 @@
             theme: {
                 extend: {
                     colors: {
-                        forest: '#052014',
-                        forestLight: '#0A3823',
+                        forest: '#052316',
+                        forestLight: '#0b3c26',
                         gold: '#D4AF37',
-                        goldHover: '#C5A028'
+                        goldHover: '#b89528',
+                        accentGold: '#E6C200'
                     }
                 }
             }
@@ -22,12 +23,16 @@
     </script>
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Supabase JS Client -->
+    <!-- Supabase Client -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
 </head>
-<body class="bg-slate-100 text-slate-800 font-sans pb-28 selection:bg-gold selection:text-forest">
+<body class="bg-slate-100 text-slate-800 font-sans pb-20 selection:bg-gold selection:text-forest">
 
-    <!-- Supabase Initialization -->
+    <!-- Supabase Configuration -->
     <script>
         const SUPABASE_URL = 'https://dtddkcgerdynswrbmknu.supabase.co';
         const SUPABASE_ANON_KEY = 'sb_publishable_tnHt7hYa9TO4rAS-tvEkpA_sraniuzS';
@@ -37,72 +42,67 @@
     </script>
 
     <!-- Header -->
-    <header class="bg-forest text-white shadow-xl sticky top-0 z-50 border-b border-gold/30">
-        <div class="max-w-md mx-auto px-4 py-3.5 flex justify-between items-center">
-            <div class="flex items-center gap-2.5 cursor-pointer" onclick="switchTab('home')">
-                <div class="w-10 h-10 rounded-xl bg-gold/10 border border-gold/40 flex items-center justify-center shadow-inner">
-                    <i class="fa-solid fa-helmet-safety text-gold text-xl"></i>
+    <header id="main-header" class="bg-forest text-white shadow-lg sticky top-0 z-40 border-b border-gold/30">
+        <div class="max-w-md mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center gap-2 cursor-pointer" onclick="switchView('home')">
+                <div class="w-9 h-9 rounded-xl bg-gold/15 border border-gold/40 flex items-center justify-center">
+                    <i class="fa-solid fa-helmet-safety text-gold text-lg"></i>
                 </div>
-                <div>
-                    <h1 class="text-lg font-black tracking-wider text-white">سـقـالات</h1>
-                    <p class="text-[10px] text-gold tracking-widest uppercase font-semibold">مصر للمقاولات</p>
-                </div>
+                <h1 class="text-xl font-black text-white tracking-wide">سـقـالات</h1>
             </div>
-            <div id="header-user-area"></div>
+            <div id="header-user-area" class="flex items-center gap-2"></div>
         </div>
     </header>
 
-    <!-- Banned Screen Overlay -->
+    <!-- Banned Screen -->
     <div id="ban-screen" class="hidden fixed inset-0 bg-red-950/95 backdrop-blur-md z-50 flex items-center justify-center p-6 text-center text-white">
-        <div class="bg-white text-slate-900 p-8 rounded-3xl max-w-sm w-full shadow-2xl border border-red-200">
-            <div class="w-16 h-16 bg-red-100 text-red-600 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl">
+        <div class="bg-white text-slate-900 p-6 rounded-3xl max-w-sm w-full shadow-2xl">
+            <div class="w-14 h-14 bg-red-100 text-red-600 rounded-full flex items-center justify-center mx-auto mb-3 text-2xl">
                 <i class="fa-solid fa-ban"></i>
             </div>
-            <h2 class="text-2xl font-black mb-2 text-red-700">تم حظر حسابك</h2>
-            <p class="text-xs text-slate-600 mb-4 leading-relaxed">عذراً، تم تعليق حسابك من قِبل إدارة المنصة لعدم الالتزام بالشروط.</p>
-            <div class="bg-red-50 border border-red-200 text-red-700 p-3 rounded-xl text-xs mb-6 font-semibold" id="ban-reason-text">
-                السبب: غير محدد
-            </div>
-            <button onclick="logout()" class="w-full bg-slate-900 text-white py-3 rounded-2xl font-bold shadow-lg text-sm transition active:scale-95">تسجيل الخروج</button>
+            <h2 class="text-xl font-bold mb-1 text-red-700">تم حظر حسابك</h2>
+            <p class="text-xs text-slate-600 mb-3">تم تعليق استخدام الحساب لمخالفة التعليمات.</p>
+            <div id="ban-reason-text" class="bg-red-50 border border-red-200 text-red-700 p-2.5 rounded-xl text-xs font-semibold mb-4">السبب: غير محدد</div>
+            <button onclick="logout()" class="w-full bg-slate-900 text-white py-2.5 rounded-xl font-bold text-xs">تسجيل الخروج</button>
         </div>
     </div>
 
-    <!-- Main Container -->
-    <main id="app-container" class="max-w-md mx-auto p-4 transition-all duration-300">
-        <!-- Dynamic content goes here -->
+    <!-- Main Dynamic Screen -->
+    <main id="app-container" class="max-w-md mx-auto p-4 min-h-[calc(100vh-120px)]">
+        <!-- Content injects here dynamically -->
     </main>
 
     <!-- Bottom Navigation Bar -->
-    <nav class="fixed bottom-0 left-0 right-0 bg-forest/95 backdrop-blur-md border-t border-gold/20 shadow-2xl z-40">
-        <div class="max-w-md mx-auto flex justify-around py-2.5">
-            <button onclick="switchTab('home')" id="nav-home" class="flex flex-col items-center text-gold text-xs font-bold transition">
-                <i class="fa-solid fa-house text-lg mb-1"></i>
+    <nav id="bottom-nav" class="fixed bottom-0 left-0 right-0 bg-forest border-t border-gold/20 shadow-2xl z-40">
+        <div class="max-w-md mx-auto flex justify-around py-2">
+            <button onclick="switchView('home')" id="nav-home" class="flex flex-col items-center text-gold text-[11px] font-bold">
+                <i class="fa-solid fa-house text-base mb-0.5"></i>
                 <span>الرئيسية</span>
             </button>
-            <button onclick="switchTab('add')" id="nav-add" class="flex flex-col items-center text-slate-400 hover:text-gold text-xs font-medium transition">
-                <i class="fa-solid fa-circle-plus text-lg text-gold mb-1"></i>
+            <button onclick="switchView('add')" id="nav-add" class="flex flex-col items-center text-slate-400 hover:text-gold text-[11px] font-medium">
+                <i class="fa-solid fa-square-plus text-base text-gold mb-0.5"></i>
                 <span>إضافة إعلان</span>
             </button>
-            <button onclick="switchTab('requests')" id="nav-requests" class="flex flex-col items-center text-slate-400 hover:text-gold text-xs font-medium transition">
-                <i class="fa-solid fa-list-check text-lg mb-1"></i>
+            <button onclick="switchView('requests')" id="nav-requests" class="flex flex-col items-center text-slate-400 hover:text-gold text-[11px] font-medium">
+                <i class="fa-solid fa-list-check text-base mb-0.5"></i>
                 <span>طلباتي</span>
             </button>
-            <button onclick="switchTab('chats')" id="nav-chats" class="flex flex-col items-center text-slate-400 hover:text-gold text-xs font-medium transition">
-                <i class="fa-solid fa-comments text-lg mb-1"></i>
+            <button onclick="switchView('chats')" id="nav-chats" class="flex flex-col items-center text-slate-400 hover:text-gold text-[11px] font-medium">
+                <i class="fa-solid fa-comments text-base mb-0.5"></i>
                 <span>الرسائل</span>
             </button>
-            <button onclick="switchTab('profile')" id="nav-profile" class="flex flex-col items-center text-slate-400 hover:text-gold text-xs font-medium transition">
-                <i class="fa-solid fa-user text-lg mb-1"></i>
+            <button onclick="switchView('profile')" id="nav-profile" class="flex flex-col items-center text-slate-400 hover:text-gold text-[11px] font-medium">
+                <i class="fa-solid fa-user text-base mb-0.5"></i>
                 <span>حسابي</span>
             </button>
         </div>
     </nav>
 
-    <!-- App JavaScript Logic -->
+    <!-- Application Script Engine -->
     <script>
         async function initApp() {
+            // Google OAuth session handler
             const { data: { session } } = await supabase.auth.getSession();
-            
             if (session && session.user) {
                 const authUser = session.user;
                 let { data: profile } = await supabase.from('users').select('*').eq('id', authUser.id).single();
@@ -131,15 +131,21 @@
             }
 
             renderHeader();
-            switchTab('home');
+            if (!currentUser) {
+                switchView('welcome');
+            } else {
+                switchView('home');
+            }
         }
 
         function renderHeader() {
             const area = document.getElementById('header-user-area');
             if (!currentUser) {
-                area.innerHTML = `<button onclick="switchTab('profile')" class="bg-gold text-forest px-4 py-2 rounded-xl font-black text-xs shadow-lg active:scale-95 transition">دخول</button>`;
+                area.innerHTML = `<button onclick="switchView('role-select')" class="bg-gold text-forest px-3 py-1.5 rounded-lg font-extrabold text-xs shadow">تسجيل الدخول</button>`;
             } else {
-                area.innerHTML = `<span class="text-xs bg-forestLight border border-gold/40 px-3 py-1.5 rounded-full text-gold font-black shadow-inner">#${currentUser.short_id || '------'}</span>`;
+                area.innerHTML = `
+                    <span class="text-[11px] bg-forestLight border border-gold/40 px-2.5 py-1 rounded-full text-gold font-bold">#${currentUser.short_id || '------'}</span>
+                `;
             }
         }
 
@@ -153,16 +159,196 @@
                 provider: 'google',
                 options: { redirectTo: window.location.origin }
             });
-            if (error) alert('خطأ في تسجيل جوجل: ' + error.message);
+            if (error) alert('خطأ في الاتصال بجوجل: ' + error.message);
         }
 
-        async function handlePhoneRegister() {
+        function logout() {
+            supabase.auth.signOut();
+            localStorage.removeItem('sagalat_user');
+            currentUser = null;
+            location.reload();
+        }
+
+        // View Routing Management
+        function switchView(viewName, params = {}) {
+            const container = document.getElementById('app-container');
+            const bottomNav = document.getElementById('bottom-nav');
+            const mainHeader = document.getElementById('main-header');
+
+            // Bottom Nav visibility & highlighting
+            if (['welcome', 'role-select', 'login'].includes(viewName)) {
+                bottomNav.classList.add('hidden');
+            } else {
+                bottomNav.classList.remove('hidden');
+                ['home', 'add', 'requests', 'chats', 'profile'].forEach(t => {
+                    const btn = document.getElementById(`nav-${t}`);
+                    if (btn) {
+                        btn.className = (t === viewName) ? 
+                            "flex flex-col items-center text-gold text-[11px] font-bold" : 
+                            "flex flex-col items-center text-slate-400 hover:text-gold text-[11px] font-medium";
+                    }
+                });
+            }
+
+            // Route Rendering
+            switch (viewName) {
+                case 'welcome':
+                    renderWelcome(container);
+                    break;
+                case 'role-select':
+                    renderRoleSelect(container);
+                    break;
+                case 'login':
+                    renderLoginForm(container, params.role || 'worker');
+                    break;
+                case 'home':
+                    renderHomeScreen(container);
+                    break;
+                case 'listing-details':
+                    renderListingDetails(container, params.item);
+                    break;
+                case 'add':
+                    renderAddListing(container);
+                    break;
+                case 'requests':
+                    renderRequestsScreen(container);
+                    break;
+                case 'chats':
+                    renderChatsScreen(container);
+                    break;
+                case 'profile':
+                    renderProfileScreen(container);
+                    break;
+                case 'admin':
+                    renderAdminDashboard(container);
+                    break;
+            }
+        }
+
+        // 1. Splash / Welcome View
+        function renderWelcome(container) {
+            container.innerHTML = `
+                <div class="flex flex-col items-center justify-between min-h-[80vh] text-center pt-8 pb-4">
+                    <div class="w-full flex flex-col items-center">
+                        <div class="w-20 h-20 rounded-3xl bg-gold/10 border border-gold/40 flex items-center justify-center mb-4 shadow-lg">
+                            <i class="fa-solid fa-helmet-safety text-gold text-4xl"></i>
+                        </div>
+                        <h1 class="text-3xl font-black text-forest tracking-wider mb-2">سـقـالات</h1>
+                        <p class="text-xs text-slate-600 font-bold mb-6">منصة المقاولات وتأجير المعدات في مصر</p>
+                        <p class="text-xs text-slate-500 max-w-xs leading-relaxed mb-6">فرص عمل .. معدات .. عمالة<br>كل ما تحتاجه في مكان واحد</p>
+                    </div>
+                    <div class="w-full space-y-3">
+                        <button onclick="switchView('role-select')" class="w-full bg-gold hover:bg-goldHover text-forest py-3.5 rounded-2xl font-black shadow-lg text-sm transition">ابدأ الآن</button>
+                        <button onclick="switchView('role-select')" class="text-xs text-slate-600 font-bold">لديك حساب بالفعل؟ <span class="text-forest underline">تسجيل الدخول</span></button>
+                    </div>
+                </div>
+            `;
+        }
+
+        // 2. Role Selection View
+        function renderRoleSelect(container) {
+            container.innerHTML = `
+                <div class="pt-4">
+                    <h2 class="text-xl font-black text-forest mb-1 text-center">إنشاء حساب جديد</h2>
+                    <p class="text-xs text-slate-500 mb-6 text-center">اختر نوع الحساب للانضمام للمنصة</p>
+
+                    <div class="space-y-3">
+                        <div onclick="switchView('login', {role: 'contractor'})" class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between cursor-pointer hover:border-gold transition">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-xl bg-amber-50 text-gold flex items-center justify-center text-lg font-bold"><i class="fa-solid fa-user-gear"></i></div>
+                                <div>
+                                    <h4 class="font-bold text-slate-900 text-sm">مقاول</h4>
+                                    <p class="text-[11px] text-slate-500">إدارة مشاريعك وطلب العمال وتأجير المعدات</p>
+                                </div>
+                            </div>
+                            <i class="fa-solid fa-chevron-left text-slate-400 text-xs"></i>
+                        </div>
+
+                        <div onclick="switchView('login', {role: 'worker'})" class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between cursor-pointer hover:border-gold transition">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-xl bg-amber-50 text-gold flex items-center justify-center text-lg font-bold"><i class="fa-solid fa-helmet-safety"></i></div>
+                                <div>
+                                    <h4 class="font-bold text-slate-900 text-sm">عامل</h4>
+                                    <p class="text-[11px] text-slate-500">البحث عن فرص عمل وتقديم الطلبات</p>
+                                </div>
+                            </div>
+                            <i class="fa-solid fa-chevron-left text-slate-400 text-xs"></i>
+                        </div>
+
+                        <div onclick="switchView('login', {role: 'supplier'})" class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between cursor-pointer hover:border-gold transition">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-xl bg-amber-50 text-gold flex items-center justify-center text-lg font-bold"><i class="fa-solid fa-house-circle-check"></i></div>
+                                <div>
+                                    <h4 class="font-bold text-slate-900 text-sm">مؤجر</h4>
+                                    <p class="text-[11px] text-slate-500">نشر معدتك للتأجير واستقبال الطلبات</p>
+                                </div>
+                            </div>
+                            <i class="fa-solid fa-chevron-left text-slate-400 text-xs"></i>
+                        </div>
+
+                        <div onclick="switchView('login', {role: 'renter'})" class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between cursor-pointer hover:border-gold transition">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-xl bg-amber-50 text-gold flex items-center justify-center text-lg font-bold"><i class="fa-solid fa-truck-ramp-box"></i></div>
+                                <div>
+                                    <h4 class="font-bold text-slate-900 text-sm">مستأجر</h4>
+                                    <p class="text-[11px] text-slate-500">استئجار المعدات والسقالات بسهولة</p>
+                                </div>
+                            </div>
+                            <i class="fa-solid fa-chevron-left text-slate-400 text-xs"></i>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // 3. Login & Registration View
+        function renderLoginForm(container, role) {
+            container.innerHTML = `
+                <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-200 mt-2">
+                    <h2 class="text-xl font-black text-forest mb-1 text-center">تسجيل الدخول / إنشاء حساب</h2>
+                    <p class="text-xs text-slate-500 mb-4 text-center">الحساب المختار: <span class="font-bold text-forest">${getRoleName(role)}</span></p>
+
+                    <!-- Google OAuth -->
+                    <button onclick="loginWithGoogle()" class="w-full bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 py-3 rounded-2xl font-bold flex items-center justify-center gap-2 shadow-sm mb-4 text-xs">
+                        <svg class="w-4 h-4" viewBox="0 0 24 24">
+                            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                            <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+                            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+                        </svg>
+                        <span>التسجيل بواسطة Google</span>
+                    </button>
+
+                    <div class="relative flex py-2 items-center mb-4">
+                        <div class="flex-grow border-t border-slate-200"></div>
+                        <span class="flex-shrink mx-2 text-[10px] text-slate-400">أو برقم الهاتف</span>
+                        <div class="flex-grow border-t border-slate-200"></div>
+                    </div>
+
+                    <div class="space-y-3">
+                        <input type="text" id="auth-phone" placeholder="أدخل رقم هاتفك" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold focus:outline-none focus:border-gold">
+                        <input type="text" id="auth-name" placeholder="الاسم الكامل" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold focus:outline-none focus:border-gold">
+                        
+                        ${role === 'contractor' ? `
+                            <select id="auth-subrole" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold">
+                                <option value="both">مقاول ومؤجر (نشر وظائف وتأجير)</option>
+                                <option value="jobs_only">مقاول فقط (طلبات عمال فقط)</option>
+                            </select>
+                        ` : ''}
+
+                        <button onclick="handlePhoneRegister('${role}')" class="w-full bg-gold hover:bg-goldHover text-forest py-3 rounded-xl font-black shadow text-xs">تسجيل الدخول</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        async function handlePhoneRegister(role) {
             const phone = document.getElementById('auth-phone').value.trim();
             const full_name = document.getElementById('auth-name').value.trim();
-            const role = document.getElementById('auth-role').value;
+            const sub_role = role === 'contractor' ? document.getElementById('auth-subrole')?.value : null;
 
             if (!phone || !full_name) {
-                alert('الرجاء إدخال رقم الهاتف والاسم الكامل');
+                alert('برجاء تعبئة رقم الهاتف والاسم الكامل');
                 return;
             }
 
@@ -170,17 +356,17 @@
 
             if (existing) {
                 if (existing.is_banned) {
-                    alert('هذا الحساب محظور!');
+                    alert('الحساب محظور من دخول المنصة!');
                     return;
                 }
                 currentUser = existing;
             } else {
                 const { data: newUser, error } = await supabase.from('users').insert([
-                    { phone, full_name, role }
+                    { phone, full_name, role, contractor_sub_role: sub_role }
                 ]).select().single();
 
                 if (error) {
-                    alert('خطأ: ' + error.message);
+                    alert('خطأ أثناء التسجيل: ' + error.message);
                     return;
                 }
                 currentUser = newUser;
@@ -191,180 +377,191 @@
             location.reload();
         }
 
-        function logout() {
-            supabase.auth.signOut();
-            localStorage.removeItem('sagalat_user');
-            currentUser = null;
-            location.reload();
-        }
-
-        function switchTab(tab) {
-            const container = document.getElementById('app-container');
-
-            ['home', 'add', 'requests', 'chats', 'profile'].forEach(t => {
-                const btn = document.getElementById(`nav-${t}`);
-                if (btn) {
-                    if (t === tab) {
-                        btn.className = "flex flex-col items-center text-gold text-xs font-bold scale-105 transition";
-                    } else {
-                        btn.className = "flex flex-col items-center text-slate-400 hover:text-gold text-xs font-medium transition";
-                    }
-                }
-            });
-
-            if (tab === 'home') {
-                container.innerHTML = `
-                    <div class="mb-4">
-                        <div class="bg-gradient-to-br from-forest to-forestLight text-white p-6 rounded-3xl shadow-xl border border-gold/20 text-center relative overflow-hidden">
-                            <h2 class="text-xl font-black mb-2 text-gold">سقالات</h2>
-                            <p class="text-xs text-slate-200 mb-4">منصة المقاولات وتأجير المعدات</p>
-                            <div class="grid grid-cols-2 gap-3 mt-4">
-                                <div onclick="filterCategory('job')" class="bg-forestLight/80 border border-gold/40 p-4 rounded-2xl cursor-pointer hover:bg-forest transition text-center shadow">
-                                    <i class="fa-solid fa-helmet-safety text-gold text-2xl mb-1"></i>
-                                    <div class="text-xs font-bold text-white">فرص العمل</div>
-                                </div>
-                                <div onclick="filterCategory('equipment')" class="bg-forestLight/80 border border-gold/40 p-4 rounded-2xl cursor-pointer hover:bg-forest transition text-center shadow">
-                                    <i class="fa-solid fa-screwdriver-wrench text-gold text-2xl mb-1"></i>
-                                    <div class="text-xs font-bold text-white">تأجير المعدات</div>
-                                </div>
-                            </div>
+        // 4. Home Screen View
+        let activeFeedListings = [];
+        async function renderHomeScreen(container) {
+            container.innerHTML = `
+                <div class="mb-4">
+                    <div class="bg-forest text-white p-4 rounded-2xl shadow-md border border-gold/20 relative">
+                        <div class="flex items-center justify-between mb-3">
+                            <h2 class="text-lg font-black text-gold">سـقـالات</h2>
+                            <span class="text-[10px] bg-forestLight px-2.5 py-1 rounded-full text-slate-300 font-bold"><i class="fa-solid fa-location-dot text-gold ml-1"></i>القاهرة</span>
+                        </div>
+                        <div class="relative">
+                            <input type="text" id="search-input" onkeyup="filterFeed()" placeholder="أبحث عن فرص عمل أو معدات..." class="w-full pr-9 pl-3 py-2.5 bg-white text-slate-800 rounded-xl text-xs font-medium shadow-sm focus:outline-none">
+                            <i class="fa-solid fa-magnifying-glass absolute right-3 top-3 text-slate-400 text-xs"></i>
                         </div>
                     </div>
-                    <div class="relative mb-4">
-                        <span class="absolute right-3.5 top-3.5 text-slate-400"><i class="fa-solid fa-magnifying-glass"></i></span>
-                        <input type="text" id="search-input" onkeyup="filterListings()" placeholder="ابحث عن فرصة عمل أو معدات..." class="w-full pr-10 pl-4 py-3 bg-white border border-slate-200 rounded-2xl text-xs font-medium shadow-sm focus:outline-none focus:border-gold transition">
+                </div>
+
+                <div class="grid grid-cols-2 gap-3 mb-4">
+                    <div onclick="filterFeedCategory('equipment')" class="bg-forest text-white p-4 rounded-2xl flex flex-col items-center justify-center cursor-pointer shadow-sm border border-gold/30 hover:scale-[1.02] transition">
+                        <i class="fa-solid fa-trowel-bricks text-gold text-2xl mb-1"></i>
+                        <span class="text-xs font-black">تأجير المعدات</span>
                     </div>
-                    <h3 class="font-black text-sm text-forest mb-3">أحدث الإعلانات</h3>
-                    <div id="listings-feed" class="space-y-3">
-                        <div class="text-center py-10 text-slate-400 text-xs">جاري تحميل الإعلانات...</div>
+                    <div onclick="filterFeedCategory('job')" class="bg-forest text-white p-4 rounded-2xl flex flex-col items-center justify-center cursor-pointer shadow-sm border border-gold/30 hover:scale-[1.02] transition">
+                        <i class="fa-solid fa-helmet-safety text-gold text-2xl mb-1"></i>
+                        <span class="text-xs font-black">فرص العمل</span>
                     </div>
-                `;
-                loadListings();
-            } else if (tab === 'add') {
-                renderAddForm(container);
-            } else if (tab === 'requests') {
-                renderRequests(container);
-            } else if (tab === 'chats') {
-                renderChats(container);
-            } else if (tab === 'profile') {
-                renderProfile(container);
-            }
+                </div>
+
+                <div class="flex justify-between items-center mb-3">
+                    <h3 class="font-black text-sm text-forest">أحدث الإعلانات</h3>
+                    <button onclick="loadListingsData()" class="text-[11px] text-gold font-bold">عرض الكل</button>
+                </div>
+
+                <div id="listings-feed" class="space-y-3">
+                    <p class="text-center text-slate-400 py-6 text-xs">جاري تحميل الإعلانات...</p>
+                </div>
+            `;
+            loadListingsData();
         }
 
-        let allListings = [];
-        async function loadListings() {
+        async function loadListingsData() {
             const feed = document.getElementById('listings-feed');
             const { data: listings, error } = await supabase.from('listings').select('*').order('created_at', { ascending: false });
 
             if (error || !listings || listings.length === 0) {
-                feed.innerHTML = `<div class="bg-white p-8 rounded-2xl text-center text-slate-400 text-xs shadow-sm">لا توجد إعلانات متاحة حالياً.</div>`;
+                feed.innerHTML = `<p class="text-center text-slate-400 py-6 text-xs">لا توجد إعلانات حالياً.</p>`;
                 return;
             }
 
-            allListings = listings;
-            renderListings(allListings);
+            activeFeedListings = listings;
+            renderFeedItems(listings);
         }
 
-        function renderListings(items) {
+        function renderFeedItems(items) {
             const feed = document.getElementById('listings-feed');
             if (items.length === 0) {
-                feed.innerHTML = `<div class="bg-white p-8 rounded-2xl text-center text-slate-400 text-xs shadow-sm">لا توجد نتائج مطابقة.</div>`;
+                feed.innerHTML = `<p class="text-center text-slate-400 py-6 text-xs">لا توجد نتائج مطابقة.</p>`;
                 return;
             }
 
             feed.innerHTML = items.map(item => `
-                <div class="bg-white p-4.5 rounded-2xl shadow-sm border border-slate-200 hover:border-gold/50 transition">
+                <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-200">
                     <div class="flex justify-between items-start mb-2">
-                        <span class="text-[10px] bg-amber-50 text-amber-800 px-3 py-1 rounded-full font-black tracking-wider uppercase border border-amber-200">
-                            ${item.type === 'job' ? 'فرصة عمل' : 'تأجير معدات'}
+                        <span class="text-[10px] bg-amber-50 text-amber-900 border border-amber-200 px-2.5 py-0.5 rounded-md font-bold">
+                            ${item.type === 'job' ? 'فرصة عمل' : 'تأجير معدة'}
                         </span>
-                        <span class="text-xs font-bold text-slate-500"><i class="fa-solid fa-location-dot text-gold ml-1"></i>${item.governorate} - ${item.area}</span>
+                        <span class="text-[11px] text-slate-500 font-bold"><i class="fa-solid fa-location-dot text-gold ml-1"></i>${item.governorate} - ${item.area}</span>
                     </div>
-                    <h3 class="font-black text-slate-900 text-base mb-1">${item.title}</h3>
-                    <p class="text-xs text-slate-600 mb-4 leading-relaxed">${item.description || 'بدون تفاصيل.'}</p>
-                    <div class="flex justify-between items-center pt-3 border-t border-slate-100">
-                        <span class="text-forest font-black text-sm">${item.price} <span class="text-[10px] text-slate-500">ج.م</span></span>
-                        <button onclick="sendRequest('${item.id}', '${item.user_id}', '${item.type}')" class="bg-forest hover:bg-forestLight text-gold text-xs px-4 py-2 rounded-xl font-black shadow-md active:scale-95 transition">
-                            تقديم طلب
+                    <h4 class="font-black text-slate-900 text-sm mb-1">${item.title}</h4>
+                    <p class="text-xs text-slate-600 mb-3">${item.description || 'بدون تفاصيل إضافية'}</p>
+                    <div class="flex justify-between items-center pt-2 border-t border-slate-100">
+                        <span class="text-forest font-black text-sm">${item.price} <span class="text-[10px] text-slate-500">ج.م/اليوم</span></span>
+                        <button onclick='switchView("listing-details", {item: ${JSON.stringify(item).replace(/'/g, "&apos;") }})' class="bg-forest text-gold text-xs px-3.5 py-1.5 rounded-xl font-bold shadow-sm">
+                            عرض التفاصيل
                         </button>
                     </div>
                 </div>
             `).join('');
         }
 
-        function filterListings() {
+        function filterFeed() {
             const query = document.getElementById('search-input').value.toLowerCase();
-            const filtered = allListings.filter(item => item.title.toLowerCase().includes(query) || item.governorate.toLowerCase().includes(query));
-            renderListings(filtered);
+            const filtered = activeFeedListings.filter(item => item.title.toLowerCase().includes(query) || item.governorate.toLowerCase().includes(query));
+            renderFeedItems(filtered);
         }
 
-        function filterCategory(catType) {
-            const filtered = allListings.filter(item => item.type === catType);
-            renderListings(filtered);
+        function filterFeedCategory(cat) {
+            const filtered = activeFeedListings.filter(item => item.type === cat);
+            renderFeedItems(filtered);
         }
 
-        async function sendRequest(listingId, ownerId, type) {
-            if (!currentUser) {
-                alert('الرجاء تسجيل الدخول أولاً.');
-                switchTab('profile');
-                return;
-            }
-            if (currentUser.id === ownerId) {
-                alert('لا يمكنك تقديم طلب على إعلانك الشخصي!');
-                return;
-            }
+        // 5. Listing Details View
+        function renderListingDetails(container, item) {
+            container.innerHTML = `
+                <div class="bg-white rounded-3xl p-5 shadow-sm border border-slate-200">
+                    <div class="flex items-center justify-between mb-3">
+                        <button onclick="switchView('home')" class="text-xs font-bold text-slate-500 flex items-center gap-1"><i class="fa-solid fa-arrow-right"></i> عودة</button>
+                        <span class="text-xs font-black text-amber-800 bg-amber-50 border border-amber-200 px-2.5 py-0.5 rounded-full">${item.type === 'job' ? 'فرصة عمل' : 'معدة للتأجير'}</span>
+                    </div>
+
+                    <div class="w-full h-40 bg-slate-100 rounded-2xl flex items-center justify-center mb-4 border border-slate-200 text-slate-400">
+                        <i class="fa-solid fa-image text-4xl"></i>
+                    </div>
+
+                    <h2 class="text-lg font-black text-slate-900 mb-1">${item.title}</h2>
+                    <p class="text-xs text-slate-500 font-bold mb-3"><i class="fa-solid fa-location-dot text-gold ml-1"></i>${item.governorate} - ${item.area}</p>
+
+                    <div class="bg-slate-50 p-3 rounded-2xl border border-slate-200 mb-4 space-y-2 text-xs">
+                        <div class="flex justify-between"><span class="text-slate-500">الأجر / السعر:</span><span class="font-bold text-forest">${item.price} ج.م</span></div>
+                        <div class="flex justify-between"><span class="text-slate-500">حالة الإعلان:</span><span class="font-bold text-emerald-600">نشط</span></div>
+                    </div>
+
+                    <h4 class="font-bold text-xs text-slate-700 mb-1">وصف الإعلان:</h4>
+                    <p class="text-xs text-slate-600 mb-6 leading-relaxed">${item.description || 'لا يوجد وصف تفصيلي مكتوب.'}</p>
+
+                    <button onclick="submitOrder('${item.id}', '${item.user_id}', '${item.type}')" class="w-full bg-forest text-gold py-3.5 rounded-2xl font-black text-xs shadow-lg mb-2">تقديم طلب الآن</button>
+                </div>
+            `;
+        }
+
+        async function submitOrder(listingId, ownerId, type) {
+            if (!currentUser) { alert('برجاء تسجيل الدخول أولاً'); switchView('role-select'); return; }
+            if (currentUser.id === ownerId) { alert('لا يمكنك التقديم على إعلانك الخص!'); return; }
 
             const { error } = await supabase.from('requests').insert([
                 { listing_id: listingId, requester_id: currentUser.id, owner_id: ownerId, type: type === 'job' ? 'job' : 'rental' }
             ]);
 
-            if (error) {
-                alert('خطأ: ' + error.message);
-                return;
-            }
-            alert('تم إرسال الطلب بنجاح!');
+            if (error) { alert('خطأ في إرسال الطلب: ' + error.message); return; }
+            alert('تم تقديم طلبك بنجاح!');
+            switchView('requests');
         }
 
-        function renderAddForm(container) {
-            if (!currentUser) { renderProfile(container); return; }
+        // 6. Add Listing View
+        function renderAddListing(container) {
+            if (!currentUser) { switchView('role-select'); return; }
             if (currentUser.role === 'worker' || currentUser.role === 'renter') {
-                container.innerHTML = `<div class="bg-red-50 border border-red-200 text-red-700 p-6 rounded-3xl text-center text-xs font-bold">عذراً، نوع حسابك لا يملك صلاحية نشر إعلانات.</div>`;
+                container.innerHTML = `<div class="bg-red-50 text-red-700 p-6 rounded-3xl text-center text-xs font-bold border border-red-200">حسابك لا يملك صلاحية إضافة إعلانات جديدة.</div>`;
                 return;
             }
 
             container.innerHTML = `
-                <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-200">
-                    <h3 class="font-black text-lg mb-4 text-forest flex items-center gap-2">
-                        <i class="fa-solid fa-circle-plus text-gold"></i> إضافة إعلان جديد
-                    </h3>
+                <div class="bg-white p-5 rounded-3xl shadow-sm border border-slate-200">
+                    <h3 class="font-black text-base text-forest mb-4">إضافة إعلان جديد</h3>
+                    
                     <div class="space-y-3">
-                        <select id="list-type" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-2xl text-xs font-bold">
-                            <option value="job">فرصة عمل</option>
-                            <option value="equipment">تأجير معدات / سقالات</option>
-                        </select>
-                        <input type="text" id="list-title" placeholder="عنوان الإعلان" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-2xl text-xs font-bold">
-                        <div class="grid grid-cols-2 gap-2">
-                            <input type="text" id="list-gov" placeholder="المحافظة" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-2xl text-xs font-bold">
-                            <input type="text" id="list-area" placeholder="المنطقة" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-2xl text-xs font-bold">
+                        <div>
+                            <label class="block text-[11px] font-bold text-slate-600 mb-1">نوع الإعلان</label>
+                            <select id="add-type" class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold">
+                                <option value="job">فرصة عمل</option>
+                                <option value="equipment">تأجير معدات / سقالات</option>
+                            </select>
                         </div>
-                        <input type="number" id="list-price" placeholder="السعر بالجنيه" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-2xl text-xs font-bold">
-                        <textarea id="list-desc" placeholder="التفاصيل كاملة..." class="w-full p-3 bg-slate-50 border border-slate-200 rounded-2xl text-xs font-medium h-24"></textarea>
-                        <button onclick="submitListing()" class="w-full bg-forest hover:bg-forestLight text-gold py-3.5 rounded-2xl font-black text-sm shadow-xl">نشر الإعلان</button>
+                        <div>
+                            <label class="block text-[11px] font-bold text-slate-600 mb-1">عنوان الإعلان</label>
+                            <input type="text" id="add-title" placeholder="عنوان الوظيفة أو المعدة" class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold">
+                        </div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <input type="text" id="add-gov" placeholder="المافظة" class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold">
+                            <input type="text" id="add-area" placeholder="المنطقة" class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-bold text-slate-600 mb-1">السعر / الأجر (بالجنيه)</label>
+                            <input type="number" id="add-price" placeholder="مثال: 300" class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-bold text-slate-600 mb-1">وصف الإعلان والتفاصيل</label>
+                            <textarea id="add-desc" placeholder="شروط العمل، الكمية المتاحة..." class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium h-24"></textarea>
+                        </div>
+                        <button onclick="postListing()" class="w-full bg-forest text-gold py-3 rounded-xl font-black text-xs shadow-md">نشر الإعلان</button>
                     </div>
                 </div>
             `;
         }
 
-        async function submitListing() {
-            const type = document.getElementById('list-type').value;
-            const title = document.getElementById('list-title').value.trim();
-            const governorate = document.getElementById('list-gov').value.trim();
-            const area = document.getElementById('list-area').value.trim();
-            const price = document.getElementById('list-price').value;
-            const description = document.getElementById('list-desc').value.trim();
+        async function postListing() {
+            const type = document.getElementById('add-type').value;
+            const title = document.getElementById('add-title').value.trim();
+            const governorate = document.getElementById('add-gov').value.trim();
+            const area = document.getElementById('add-area').value.trim();
+            const price = document.getElementById('add-price').value;
+            const description = document.getElementById('add-desc').value.trim();
 
             if (!title || !governorate || !price) {
-                alert('الرجاء إكمال الحقول الأساسية');
+                alert('يرجى كتابة الحقول الأساسية');
                 return;
             }
 
@@ -372,14 +569,15 @@
                 { user_id: currentUser.id, type, title, governorate, area, price: parseFloat(price), description }
             ]);
 
-            if (error) { alert('خطأ: ' + error.message); return; }
-            alert('تم النشر بنجاح!');
-            switchTab('home');
+            if (error) { alert('حدث خطأ في النشر: ' + error.message); return; }
+            alert('تم نشر الإعلان بنجاح!');
+            switchView('home');
         }
 
-        async function renderRequests(container) {
-            if (!currentUser) { renderProfile(container); return; }
-            container.innerHTML = `<div class="text-center py-10 text-slate-400 text-xs">جاري التحميل...</div>`;
+        // 7. Requests View
+        async function renderRequestsScreen(container) {
+            if (!currentUser) { switchView('role-select'); return; }
+            container.innerHTML = `<p class="text-center text-slate-400 py-8 text-xs">جاري تحميل الطلبات...</p>`;
 
             const { data: requests, error } = await supabase.from('requests')
                 .select('*, listings(title, price)')
@@ -387,119 +585,105 @@
                 .order('created_at', { ascending: false });
 
             if (error || !requests || requests.length === 0) {
-                container.innerHTML = `<div class="bg-white p-8 rounded-2xl text-center text-slate-400 text-xs">لا توجد طلبات.</div>`;
+                container.innerHTML = `<div class="bg-white p-6 rounded-3xl text-center text-slate-400 text-xs shadow-sm">لا توجد طلبات حية حالياً.</div>`;
                 return;
             }
 
             container.innerHTML = `
-                <h2 class="font-black text-lg text-forest mb-4">طلباتي</h2>
+                <h3 class="font-black text-base text-forest mb-3">قائمة طلباتي</h3>
                 <div class="space-y-3">
                     ${requests.map(req => `
-                        <div class="bg-white p-4.5 rounded-2xl shadow-sm border border-slate-200">
-                            <div class="flex justify-between items-center mb-2">
-                                <span class="text-[10px] bg-slate-100 text-slate-700 px-2.5 py-1 rounded-full font-black">${req.type === 'job' ? 'عمل' : 'تأجير'}</span>
-                                <span class="text-[10px] bg-amber-100 text-amber-900 px-2.5 py-1 rounded-full font-black">${req.status}</span>
+                        <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-200">
+                            <div class="flex justify-between items-center mb-1">
+                                <span class="text-[10px] bg-slate-100 text-slate-700 px-2 py-0.5 rounded font-bold">${req.type === 'job' ? 'طلب عمل' : 'طلب تأجير'}</span>
+                                <span class="text-[10px] bg-amber-50 text-amber-800 border border-amber-200 px-2 py-0.5 rounded font-bold">${req.status}</span>
                             </div>
-                            <h4 class="font-black text-slate-900 text-sm mb-3">${req.listings ? req.listings.title : 'إعلان'}</h4>
-                            <button onclick="switchTab('chats')" class="w-full bg-forest text-gold text-xs py-2 rounded-xl font-black">المحادثات</button>
+                            <h4 class="font-bold text-slate-900 text-xs my-1">${req.listings ? req.listings.title : 'إعلان'}</h4>
+                            <button onclick="switchView('chats')" class="w-full mt-2 bg-forest text-gold text-xs py-1.5 rounded-lg font-bold">محادثة صاحب الطلب</button>
                         </div>
                     `).join('')}
                 </div>
             `;
         }
 
-        function renderChats(container) {
-            if (!currentUser) { renderProfile(container); return; }
+        // 8. Chats View
+        function renderChatsScreen(container) {
+            if (!currentUser) { switchView('role-select'); return; }
             container.innerHTML = `
                 <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-200 text-center">
-                    <div class="w-14 h-14 bg-emerald-50 text-forest rounded-2xl flex items-center justify-center mx-auto mb-3 text-2xl shadow-inner"><i class="fa-solid fa-comments"></i></div>
-                    <h3 class="font-black text-forest text-base mb-1">المحادثات المباشرة</h3>
-                    <p class="text-xs text-slate-500">اختر طلباً لبدء التواصل الفوري.</p>
+                    <div class="w-12 h-12 bg-amber-50 text-gold rounded-2xl flex items-center justify-center mx-auto mb-2 text-xl"><i class="fa-solid fa-comments"></i></div>
+                    <h3 class="font-black text-forest text-sm mb-1">المحادثات المباشرة</h3>
+                    <p class="text-xs text-slate-500">يمكنك بدء الشات الفوري عند تقديم أي طلب عبر المنصة.</p>
                 </div>
             `;
         }
 
-        function renderProfile(container) {
-            if (!currentUser) {
-                container.innerHTML = `
-                    <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-200">
-                        <h2 class="text-xl font-black text-forest mb-4 text-center">تسجيل الدخول / حساب جديد</h2>
-                        
-                        <!-- Google Auth Button -->
-                        <button onclick="loginWithGoogle()" class="w-full bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 py-3.5 rounded-2xl font-black flex items-center justify-center gap-2.5 shadow-sm mb-4 active:scale-95 transition">
-                            <svg class="w-5 h-5" viewBox="0 0 24 24">
-                                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-                                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-                                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
-                                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
-                            </svg>
-                            <span>تسجيل الدخول باستخدام Google</span>
-                        </button>
-
-                        <div class="relative flex py-2 items-center mb-4">
-                            <div class="flex-grow border-t border-slate-200"></div>
-                            <span class="flex-shrink mx-3 text-[11px] text-slate-400 font-bold">أو بالهاتف</span>
-                            <div class="flex-grow border-t border-slate-200"></div>
-                        </div>
-
-                        <div class="space-y-3">
-                            <input type="text" id="auth-phone" placeholder="رقم الهاتف" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-2xl text-xs font-bold">
-                            <input type="text" id="auth-name" placeholder="الاسم الكامل" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-2xl text-xs font-bold">
-                            <select id="auth-role" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-2xl text-xs font-bold">
-                                <option value="contractor">مقاول</option>
-                                <option value="worker">عامل</option>
-                                <option value="supplier">مؤجر معدات</option>
-                                <option value="renter">مستأجر</option>
-                            </select>
-                            <button onclick="handlePhoneRegister()" class="w-full bg-forest text-gold py-3.5 rounded-2xl font-black text-sm shadow-xl">دخول</button>
-                        </div>
-                    </div>
-                `;
-                return;
-            }
-
-            let adminHTML = '';
-            if (currentUser.role === 'admin') {
-                adminHTML = `
-                    <div class="mt-4 p-5 bg-amber-50 border border-gold/40 rounded-3xl">
-                        <h3 class="font-black text-forest text-sm mb-3">لوحة تحكم المدير (حظر مستخدم)</h3>
-                        <div class="space-y-2">
-                            <input type="text" id="ban-id" placeholder="Short ID أو رقم الهاتف" class="w-full p-3 bg-white border border-slate-200 rounded-2xl text-xs font-bold">
-                            <input type="text" id="ban-reason" placeholder="سبب الحظر" class="w-full p-3 bg-white border border-slate-200 rounded-2xl text-xs font-bold">
-                            <button onclick="adminBan()" class="w-full bg-red-600 text-white py-2.5 rounded-xl text-xs font-black">حظر الحساب</button>
-                        </div>
-                    </div>
-                `;
-            }
+        // 9. Profile View
+        function renderProfileScreen(container) {
+            if (!currentUser) { switchView('role-select'); return; }
 
             container.innerHTML = `
                 <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-200">
                     <div class="flex justify-between items-center mb-4 pb-3 border-b border-slate-100">
-                        <h2 class="text-lg font-black text-forest">${currentUser.full_name}</h2>
-                        <span class="bg-amber-100 text-amber-900 text-xs px-3 py-1 rounded-full font-black">ID: #${currentUser.short_id || '----'}</span>
+                        <div>
+                            <h3 class="font-black text-forest text-base">${currentUser.full_name}</h3>
+                            <p class="text-xs text-slate-500">${getRoleName(currentUser.role)}</p>
+                        </div>
+                        <span class="bg-amber-100 text-amber-900 text-xs px-3 py-1 rounded-full font-bold">#${currentUser.short_id || '------'}</span>
                     </div>
-                    <p class="text-xs text-slate-500 mb-1">الهاتف/البريد: <span class="font-bold text-slate-800">${currentUser.phone || currentUser.email || 'غير مسجل'}</span></p>
-                    <p class="text-xs text-slate-500 mb-4">نوع الحساب: <span class="font-black text-forest">${getRoleName(currentUser.role)}</span></p>
-                    ${adminHTML}
-                    <button onclick="logout()" class="w-full mt-5 bg-red-50 text-red-600 border border-red-200 py-3 rounded-2xl font-black text-xs">تسجيل الخروج</button>
+
+                    <div class="space-y-2 text-xs mb-6">
+                        <div class="flex justify-between py-1 border-b border-slate-50"><span class="text-slate-500">رقم الهاتف:</span><span class="font-bold text-slate-800">${currentUser.phone || 'غير مسجل'}</span></div>
+                        <div class="flex justify-between py-1 border-b border-slate-50"><span class="text-slate-500">البريد الإلكتروني:</span><span class="font-bold text-slate-800">${currentUser.email || 'غير مسجل'}</span></div>
+                    </div>
+
+                    <!-- Telegram Link Button -->
+                    <div class="bg-sky-50 border border-sky-200 p-4 rounded-2xl mb-4 text-center">
+                        <i class="fa-brands fa-telegram text-sky-600 text-2xl mb-1"></i>
+                        <h4 class="font-bold text-xs text-sky-900 mb-1">ربط بوت تيليجرام (اختياري)</h4>
+                        <p class="text-[10px] text-sky-700 mb-2">استقبل الإشعارات الفورية على تليجرام</p>
+                        <button onclick="alert('كود الربط المؤقت الخاص بك هو: ' + Math.floor(100000 + Math.random() * 900000))" class="bg-sky-600 text-white text-xs px-4 py-1.5 rounded-xl font-bold">إنشاء كود الربط</button>
+                    </div>
+
+                    ${currentUser.role === 'admin' ? `
+                        <button onclick="switchView('admin')" class="w-full mb-3 bg-amber-500 text-white py-3 rounded-2xl font-bold text-xs shadow">لوحة الإدارة (Admin Dashboard)</button>
+                    ` : ''}
+
+                    <button onclick="logout()" class="w-full bg-red-50 text-red-600 border border-red-200 py-3 rounded-2xl font-bold text-xs">تسجيل الخروج</button>
                 </div>
             `;
         }
 
-        async function adminBan() {
-            const target = document.getElementById('ban-id').value.trim();
-            const reason = document.getElementById('ban-reason').value.trim() || 'مخالفة الشروط';
+        // 10. Admin Dashboard
+        function renderAdminDashboard(container) {
+            container.innerHTML = `
+                <div class="bg-white p-5 rounded-3xl shadow-sm border border-slate-200">
+                    <h3 class="font-black text-forest text-base mb-3">لوحة الإدارة والحظر</h3>
+                    
+                    <div class="space-y-2">
+                        <input type="text" id="ban-target" placeholder="الـ Short ID أو رقم هاتف المستخدم" class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold">
+                        <input type="text" id="ban-reason-input" placeholder="سبب الحظر" class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold">
+                        <button onclick="adminBanUser()" class="w-full bg-red-600 text-white py-2.5 rounded-xl text-xs font-black shadow">تبنيد الحساب فوراً</button>
+                    </div>
+                </div>
+            `;
+        }
 
-            if (!target) { alert('الرجاء إدخال الـ ID أو الهاتف'); return; }
+        async function adminBanUser() {
+            const target = document.getElementById('ban-target').value.trim();
+            const reason = document.getElementById('ban-reason-input').value.trim() || 'مخالفة شروط الاستخدام';
+
+            if (!target) { alert('أدخل رقم الهاتف أو الـ Short ID'); return; }
 
             const { error } = await supabase.from('users')
                 .update({ is_banned: true, ban_reason: reason })
                 .or(`short_id.eq.${target},phone.eq.${target}`);
 
             if (error) { alert('فشل الحظر: ' + error.message); return; }
-            alert('تم حظر المستخدم بنجاح!');
+            alert('تم تبنيد الحساب وتسجيل السبب في قاعدة البيانات بنجاح!');
         }
 
+        // Run application setup on load
         window.onload = initApp;
     </script>
 </body>
